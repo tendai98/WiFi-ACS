@@ -25,33 +25,6 @@ This project serves as an experimental Layer 2 firewall designed to enhance the 
 - Scapy, a powerful packet manipulation library for Python.
 - Access to the target WiFi network.
 
-## Getting Started
-
-To set up and use the Layer 2 Firewall with Deauth Frames, follow these steps:
-
-1. Clone this repository or download the project files to your standalone computer (e.g., Raspberry Pi).
-
-   ```bash
-   git clone https://github.com/tendai98/WiFi-ACS.git
-   ```
-
-2. Install the required Python libraries, including Scapy, on your computer.
-
-   ```bash
-   pip install scapy
-   ```
-
-3. Configure the firewall by editing the database of authorized MAC addresses and any access policies you wish to enforce.
-
-4. Run the Python script on your computer to start monitoring the target WiFi network.
-
-   ```bash
-   python nodd
-   ```
-
-5. The firewall will continuously monitor the network, identify unauthorized devices, and send Deauth frames to block them.
-
-6. You can access logs and reports for analysis and review in real-time.
 
 ## Usage
 
