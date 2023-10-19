@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+
+from socket import socket
+from node.cli import *
+from json import load
+
+s = socket(2,2)
+cmd = {}
+db = None
+
+def parse_out(cmd_str):
+	args = []
+
+	for arg in cmd_str.split(' '):
+		if arg != '':
+			args.append(arg)
+	return args
+
+
+def init_cli():
+	cmd.update({ 'add-host': add_host })
+	cmd.update({ 'add-guest': add_guest })
+	cmd.update({ 'del-host': delete_host })
+	cmd.update({ 'list-hosts': list_hosts })
+	cmd.update({ 'list-nodes': list_nodes })
+
+	cmd.update({ 'flush-db': flush_database })
+	cmd.update({ 'use-db': open_database})
+	cmd.update({ 'create-node':  create_node })
+	cmd.update({ 'flush-node': flush_node })
+	cmd.update({ 'sys-config': sys_config })
+	cmd.update({ 'help': help_cmd })
+
+def cli():
+	while True:
+		try:
+			command = input("node:> ")
+			args = parse_out(command)
+			try:
+				cmd[args[0]](args[1:])
+			except KeyError:
+				print("Command not found")
+
+			except Exception as e:
+				print('[-] Console Error : %s' % e)
+
+		except KeyboardInterrupt:
+			print("\n[-] Killing...")
+			exit(0)
+
+init_cli()
+cli()

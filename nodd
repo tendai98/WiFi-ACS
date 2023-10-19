@@ -1,0 +1,77 @@
+#!/usr/bin/python3
+
+from json import loads
+from sys import argv
+from socket import socket
+from threading import Thread
+
+from node.l2net import Layer2NetOPS		# network scanning and operations
+from node.l2protect import Layer2Protection	# Protect Network from intrusions
+from node.jse import JSE			# JSE (Json Storage Engine) for a minimal data store
+from node.nfx import 	* 			# NFX (Network functions) for binding logic and briding modules
+from node.api import *				# NODE Control API (Extends NCTL ops via UDP)
+from node.mon import *
+
+nfx = {}
+db = None
+BUFF_LIMIT = 4096
+
+def handle_requests(sock):
+	print("[++] NODE:[Core] :: [ACTIVE]")
+
+	while True:
+		try:
+			data, addr = sock.recvfrom(BUFF_LIMIT)
+			json = loads(data)
+			nfx[json['command']]([ db, json['data'] ])
+
+		except KeyError:
+			pass
+
+def load_config(filename):
+	fd = open(filename, "r")
+	data = fd.read()
+	config = loads(data)
+	fd.close()
+	return config
+
+
+def deploy_api():
+	init_api()
+	api()
+
+def start_node():
+	global db
+
+	try:
+		config = load_config(argv[1])
+
+		db = JSE()
+		db.open(config["database"])
+		db.flush_node({"node": config["flushOnStart"]})
+
+		print("[+] Flushed DB Node: {}".format(config["flushOnStart"]))
+		nfx.update({'host-ctl': host_control})
+
+		s = socket(2, 2)
+		s.bind(("", 9393))
+		s.setsockopt(1, 2, 1)	# Enable socket rebinding after program restarts
+
+		api_handler = Thread(target=deploy_api)
+		api_handler.start()
+
+		request_handler = Thread(target=handle_requests, args=(s, ))
+		request_handler.start()
+
+		start_monitor_interface(config['targetInterface'])
+		l2netops = Layer2NetOPS(config)
+		l2protect = Layer2Protection(config)
+
+	except IndexError:
+		print("Usage: ./node /data/config.json")
+
+	except Exception as e:
+		print("[ERROR]: "+str(e))
+
+
+start_node()

@@ -1,0 +1,14 @@
+{
+	"label":	"\t[----------COMMAND CONSOLE HELP-------------]\n\n",
+	"add-host":	"\tAdd host to network node:\n\tCommand: add-host [target-node] [11:22:33:44:55:66]\n",
+	"add-guest":	"\tAdd a host with access duration:\n\tCommand: add-guest [target-node] [11:22:33:44:55:66] [time:seconds]\n",
+	"del-host": 	"\tDelete host from network node:\n\tCommand: del-host [target-node] [11:22:33:44:55:66]\n",
+	"list-hosts": 	"\tList all hosts in a target node:\n\tCommand: list-hosts [target-node]\n",
+	"list-nodes":	"\tList all host nodes with host count:\n\tCommand: list-nodes\n",
+	"flush-db":	"\tFlush all nodes in the database:\n\tCommand: flush-db\n",
+	"use-db": 	"\tOpen and load a database:\n\tCommand: use-db /path/to/db.json\n",
+	"create-node":	"\tCreate a new Network node in the database:\n\tCommand: create-node [node-name]\n",
+	"flush-node":	"\tFlushes a new network node in the database:\n\tCommand: flush-node [node]\n",
+	"sys-config":	"\tChanges the system configurations:\n\tCommand: sys-config -v , sys-config -s [config-key] [value]\n",
+	"help":		"\tShow this message:\n\tCommand: help -a, help [command]\n"
+}
